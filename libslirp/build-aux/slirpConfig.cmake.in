@@ -1,0 +1,10 @@
+include(FeatureSummary)
+set_package_properties(slirp PROPERTIES
+    DESCRIPTION "A general purpose TCP-IP emulator used by virtual machine hypervisors to provide virtual networking services."
+)
+
+@PACKAGE_INIT@
+
+set(slirp_FOUND TRUE)
+
+include("${CMAKE_CURRENT_LIST_DIR}/slirpTargets.cmake")
