@@ -147,6 +147,11 @@ bool DSiFullBIOSBoot;
 
 CameraConfig Camera[2];
 
+#ifdef DISCORDRPC_ENABLED
+bool Discord_Enable;
+bool Discord_TrackTime;
+bool Discord_GetImageFromGameTDB;
+#endif
 
 const char* kConfigFile = "melonDS.ini";
 const char* kUniqueConfigFile = "melonDS.%d.ini";
@@ -346,6 +351,12 @@ ConfigEntry ConfigFile[] =
     {"Camera1_ImagePath", 2, &Camera[1].ImagePath, (std::string)"", false},
     {"Camera1_CamDeviceName", 2, &Camera[1].CamDeviceName, (std::string)"", false},
     {"Camera1_XFlip", 1, &Camera[1].XFlip, false, false},
+
+#ifdef DISCORDRPC_ENABLED
+    {"Discord_Enable", 1, &Discord_Enable, true, false},
+    {"Discord_TrackTime", 1, &Discord_TrackTime, true, false},
+    {"Discord_GetImageFromGameTDB", 1, &Discord_GetImageFromGameTDB, true, false},
+#endif
 
     {"", -1, nullptr, 0, false}
 };

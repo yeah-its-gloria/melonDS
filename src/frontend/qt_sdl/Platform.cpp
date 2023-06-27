@@ -191,7 +191,9 @@ int GetConfigInt(ConfigEntry entry)
     case Firm_BirthdayDay: return Config::FirmwareBirthdayDay;
     case Firm_Color: return Config::FirmwareFavouriteColour;
 
-    case AudioBitDepth: return Config::AudioBitDepth;
+    case AudioBitrate: return Config::AudioBitrate;
+
+    default: break;
     }
 
     return 0;
@@ -246,6 +248,8 @@ std::string GetConfigString(ConfigEntry entry)
 
     case Firm_Username: return Config::FirmwareUsername;
     case Firm_Message: return Config::FirmwareMessage;
+
+    default: break;
     }
 
     return "";
@@ -283,6 +287,8 @@ bool GetConfigArray(ConfigEntry entry, void* data)
             }
         }
         return false;
+
+    default: break;
     }
 
     return false;

@@ -203,6 +203,11 @@ extern bool DSiFullBIOSBoot;
 
 extern CameraConfig Camera[2];
 
+#ifdef DISCORDRPC_ENABLED
+extern bool Discord_Enable;
+extern bool Discord_TrackTime;
+extern bool Discord_GetImageFromGameTDB;
+#endif
 
 void Load();
 void Save();

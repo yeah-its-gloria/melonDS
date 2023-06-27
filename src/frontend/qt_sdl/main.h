@@ -336,8 +336,10 @@ private slots:
     void onFullscreenToggled();
     void onScreenEmphasisToggled();
 
+    void onUpdateTimerElapsed();
+
 private:
-    void closeEvent(QCloseEvent* event);
+    void closeEvent(QCloseEvent* event) override;
 
     QStringList currentROM;
     QStringList currentGBAROM;
