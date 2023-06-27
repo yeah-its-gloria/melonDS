@@ -17,7 +17,6 @@
 */
 
 #include <string.h>
-#include <dirent.h>
 #include <inttypes.h>
 #include <vector>
 
@@ -28,13 +27,13 @@ namespace fs = std::filesystem;
 
 
 // really, Windows?
-#ifdef __WIN32__
+#ifdef _WIN32
     #define melon_fseek _fseeki64
     #define melon_ftell _ftelli64
 #else
     #define melon_fseek fseek
     #define melon_ftell ftell
-#endif // __WIN32__
+#endif // _WIN32
 
 
 FATStorage::FATStorage(const std::string& filename, u64 size, bool readonly, const std::string& sourcedir)

@@ -23,7 +23,7 @@
 #include "WifiAP.h"
 #include "Platform.h"
 
-#ifndef __WIN32__
+#ifndef _WIN32
 #include <stddef.h>
 #endif
 

@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __WIN32__
+#ifdef _WIN32
     #include <windows.h>
 #else
     #include <fcntl.h>
@@ -97,7 +97,7 @@ int LastHostID;
 // because QSystemSemaphore doesn't support waiting with a timeout
 // and, as such, is unsuitable to our needs
 
-#ifdef __WIN32__
+#ifdef _WIN32
 
 bool SemInited[32];
 HANDLE SemPool[32];

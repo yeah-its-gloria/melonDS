@@ -8,7 +8,7 @@
 #include "CPUDetect.h"
 #include "../types.h"
 
-#ifndef _MSVC_VER
+#ifndef _MSC_VER
 
 #ifdef __FreeBSD__
 #include <unistd.h>
@@ -35,10 +35,11 @@ static inline void __cpuid(int info[4], int function_id)
 {
   return __cpuidex(info, function_id, 0);
 }
+#else
+#include <intrin.h>
+#endif // ifndef _MSC_VER
 
-#endif  // ifndef _WIN32
-
-#ifdef _MSVC_VER
+#ifdef _MSC_VER
 
 static u64 xgetbv(u32 index)
 {

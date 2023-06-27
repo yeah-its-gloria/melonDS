@@ -38,6 +38,12 @@
 #include "LAN_PCap.h"
 #include "LocalMP.h"
 
+#ifdef _MSC_VER
+#include <io.h>
+
+#define dup _dup
+#define fdopen _fdopen
+#endif
 
 std::string EmuDirectory;
 
@@ -109,7 +115,7 @@ void IPCDeInit()
 
 void Init(int argc, char** argv)
 {
-#if defined(__WIN32__) || defined(PORTABLE)
+#if defined(_WIN32) || defined(PORTABLE)
     if (argc > 0 && strlen(argv[0]) > 0)
     {
         int len = strlen(argv[0]);
@@ -298,7 +304,6 @@ bool GetConfigArray(ConfigEntry entry, void* data)
 FILE* OpenFile(const std::string& path, const std::string& mode, bool mustexist)
 {
     QFile f(QString::fromStdString(path));
-
     if (mustexist && !f.exists())
     {
         return nullptr;
@@ -323,7 +328,13 @@ FILE* OpenFile(const std::string& path, const std::string& mode, bool mustexist)
     }
 
     f.open(qmode);
-    FILE* file = fdopen(dup(f.handle()), mode.c_str());
+    int handle = f.handle();
+    if (handle == -1)
+    {
+        return nullptr;
+    }
+
+    FILE* file = fdopen(dup(handle), mode.c_str());
     f.close();
 
     return file;

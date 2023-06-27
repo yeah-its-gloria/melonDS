@@ -230,7 +230,7 @@ bool HotkeyReleased(int id) { return HotkeyRelease & (1<<id); }
 // Qt provides no real cross-platform way to do this, so here we go
 // for Windows and Linux we can distinguish via scancodes (but both
 // provide different scancodes)
-#ifdef __WIN32__
+#ifdef _WIN32
 bool IsRightModKey(QKeyEvent* event)
 {
     quint32 scan = event->nativeScanCode();

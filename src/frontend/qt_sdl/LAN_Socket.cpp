@@ -27,7 +27,7 @@
 
 #include <slirp/libslirp.h>
 
-#ifdef __WIN32__
+#ifdef _WIN32
 	#include <ws2tcpip.h>
 #else
 	#include <sys/socket.h>
@@ -58,7 +58,7 @@ struct pollfd FDList[FDListMax];
 int FDListSize;*/
 
 
-#ifdef __WIN32__
+#ifdef _WIN32
 
 #define poll WSAPoll
 
@@ -80,7 +80,7 @@ int clock_gettime(int, struct timespec *spec)
     return 0;
 }
 
-#endif // __WIN32__
+#endif // _WIN32
 
 
 void RXEnqueue(const void* buf, int len)
@@ -100,7 +100,7 @@ void RXEnqueue(const void* buf, int len)
         RXBuffer.Write(((u32*)buf)[i>>2]);
 }
 
-ssize_t SlirpCbSendPacket(const void* buf, size_t len, void* opaque)
+slirp_ssize_t SlirpCbSendPacket(const void* buf, size_t len, void* opaque)
 {
     if (len > 2048)
     {
@@ -477,12 +477,12 @@ int SlirpCbAddPoll(int fd, int events, void* opaque)
     if (events & SLIRP_POLL_IN) evt |= POLLIN;
     if (events & SLIRP_POLL_OUT) evt |= POLLWRNORM;
 
-#ifndef __WIN32__
+#ifndef _WIN32
     // CHECKME
     if (events & SLIRP_POLL_PRI) evt |= POLLPRI;
     if (events & SLIRP_POLL_ERR) evt |= POLLERR;
     if (events & SLIRP_POLL_HUP) evt |= POLLHUP;
-#endif // !__WIN32__
+#endif // !_WIN32
 
     PollList[idx].fd = fd;
     PollList[idx].events = evt;

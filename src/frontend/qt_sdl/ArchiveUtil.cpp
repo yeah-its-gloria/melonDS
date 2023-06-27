@@ -25,11 +25,11 @@ using Platform::LogLevel;
 namespace Archive
 {
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #define melon_archive_open(a, f, b) archive_read_open_filename_w(a, (const wchar_t*)f.utf16(), b)
 #else
 #define melon_archive_open(a, f, b) archive_read_open_filename(a, f.toUtf8().constData(), b)
-#endif // __WIN32__
+#endif // _WIN32
 
 bool compareCI(const QString& s1, const QString& s2)
 {
@@ -105,7 +105,7 @@ QVector<QString> ExtractFileFromArchive(QString path, QString wantedFile, QByteA
 
     size_t bytesToWrite = archive_entry_size(entry);
     romBuffer->fill(0, bytesToWrite);
-    ssize_t bytesRead = archive_read_data(a, romBuffer->data(), bytesToWrite);
+    la_ssize_t bytesRead = archive_read_data(a, romBuffer->data(), bytesToWrite);
 
     if (bytesRead < 0)
     {
@@ -148,7 +148,7 @@ u32 ExtractFileFromArchive(QString path, QString wantedFile, u8** filedata, u32*
     size_t bytesToRead = archive_entry_size(entry);
     if (filesize) *filesize = bytesToRead;
     *filedata = new u8[bytesToRead];
-    ssize_t bytesRead = archive_read_data(a, *filedata, bytesToRead);
+    la_ssize_t bytesRead = archive_read_data(a, *filedata, bytesToRead);
 
     archive_read_close(a);
     archive_read_free(a);

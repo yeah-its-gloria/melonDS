@@ -28,7 +28,7 @@
 #include "Config.h"
 #include "Platform.h"
 
-#ifdef __WIN32__
+#ifdef _WIN32
 	#include <iphlpapi.h>
 #else
 	#include <sys/types.h>
@@ -71,7 +71,7 @@ namespace LAN_PCap
 
 const char* PCapLibNames[] =
 {
-#ifdef __WIN32__
+#ifdef _WIN32
     // TODO: name for npcap in non-WinPCap mode
     "wpcap.dll",
 #elif defined(__APPLE__)
@@ -174,7 +174,7 @@ bool Init(bool open_adapter)
     {
         adata->Internal = dev;
 
-#ifdef __WIN32__
+#ifdef _WIN32
         // hax
         int len = strlen(dev->name);
         len -= 12; if (len > 127) len = 127;
@@ -186,13 +186,13 @@ bool Init(bool open_adapter)
 
         strncpy(adata->FriendlyName, adata->DeviceName, 127);
         adata->FriendlyName[127] = '\0';
-#endif // __WIN32__
+#endif // _WIN32
 
         dev = dev->next;
         adata++;
     }
 
-#ifdef __WIN32__
+#ifdef _WIN32
 
     ULONG bufsize = 16384;
     IP_ADAPTER_ADDRESSES* buf = (IP_ADAPTER_ADDRESSES*)HeapAlloc(GetProcessHeap(), 0, bufsize);
@@ -312,7 +312,7 @@ bool Init(bool open_adapter)
 
     freeifaddrs(addrs);
 
-#endif // __WIN32__
+#endif // _WIN32
 
     if (!open_adapter) return true;
     if (PCapAdapter) pcap_close(PCapAdapter);

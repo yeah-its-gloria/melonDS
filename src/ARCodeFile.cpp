@@ -21,6 +21,10 @@
 #include "ARCodeFile.h"
 #include "Platform.h"
 
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#endif
+
 using Platform::Log;
 using Platform::LogLevel;
 

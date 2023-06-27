@@ -31,7 +31,7 @@
 #include "ui_WifiSettingsDialog.h"
 
 
-#ifdef __WIN32__
+#ifdef _WIN32
 #define PCAP_NAME "winpcap/npcap"
 #else
 #define PCAP_NAME "libpcap"

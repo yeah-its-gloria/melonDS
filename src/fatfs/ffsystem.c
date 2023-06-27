@@ -109,16 +109,15 @@ DWORD get_fattime(void)
     // TODO: return melonDS time instead of RTC??
 
     time_t timestamp = time(NULL);
-    struct tm timedata;
-    localtime_r(&timestamp, &timedata);
+    struct tm* timedata = localtime(&timestamp);
 
     DWORD ret;
-    ret  = (timedata.tm_sec >> 1);
-    ret |= (timedata.tm_min << 5);
-    ret |= (timedata.tm_hour << 11);
-    ret |= (timedata.tm_mday << 16);
-    ret |= ((timedata.tm_mon + 1) << 21);
-    ret |= ((timedata.tm_year - 80) << 25);
+    ret  = (timedata->tm_sec >> 1);
+    ret |= (timedata->tm_min << 5);
+    ret |= (timedata->tm_hour << 11);
+    ret |= (timedata->tm_mday << 16);
+    ret |= ((timedata->tm_mon + 1) << 21);
+    ret |= ((timedata->tm_year - 80) << 25);
 
     return ret;
 }

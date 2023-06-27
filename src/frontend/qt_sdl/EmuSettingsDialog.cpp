@@ -156,8 +156,11 @@ void EmuSettingsDialog::verifyFirmware()
     // bytes 0x0C-0x14 are different.
 
     std::string filename = ui->txtFirmwarePath->text().toStdString();
+    if (filename == "") return;
+
     FILE* f = Platform::OpenLocalFile(filename, "rb");
     if (!f) return;
+    
     u8 chk1[0x180], chk2[0x180];
 
     fseek(f, 0, SEEK_SET);

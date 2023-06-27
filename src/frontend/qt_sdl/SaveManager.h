@@ -20,7 +20,6 @@
 #define SAVEMANAGER_H
 
 #include <string>
-#include <unistd.h>
 #include <time.h>
 #include <atomic>
 #include <QThread>

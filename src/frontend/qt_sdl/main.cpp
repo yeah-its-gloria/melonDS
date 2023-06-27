@@ -101,6 +101,10 @@
 
 #include "CLI.h"
 
+#ifdef _MSC_VER
+#define strcasecmp _stricmp
+#endif
+
 #ifdef DISCORDRPC_ENABLED
 #include "DiscordRPC.h"
 #endif
@@ -2818,7 +2822,7 @@ void MainWindow::onMPNewInstance()
     newinst.setProgram(QApplication::applicationFilePath());
     newinst.setArguments(QApplication::arguments().mid(1, QApplication::arguments().length()-1));
 
-#ifdef __WIN32__
+#ifdef _WIN32
     newinst.setCreateProcessArgumentsModifier([] (QProcess::CreateProcessArguments *args)
     {
         args->flags |= CREATE_NEW_CONSOLE;
@@ -3413,7 +3417,7 @@ int main(int argc, char** argv)
     return ret;
 }
 
-#ifdef __WIN32__
+#ifdef _WIN32
 
 #include <windows.h>
 

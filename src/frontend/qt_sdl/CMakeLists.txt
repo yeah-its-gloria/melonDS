@@ -76,18 +76,20 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Threads REQUIRED)
-find_package(PkgConfig REQUIRED)
 
-if (BUILD_STATIC)
-    list(APPEND PKG_CONFIG_EXECUTABLE "--static")
+if(NOT MSVC)
+    find_package(PkgConfig REQUIRED)
+
+    if (BUILD_STATIC)
+        list(APPEND PKG_CONFIG_EXECUTABLE "--static")
+    endif()
+
+    pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
+    pkg_check_modules(Slirp REQUIRED IMPORTED_TARGET slirp)
+    pkg_check_modules(LibArchive REQUIRED IMPORTED_TARGET libarchive)
+
+    fix_interface_includes(PkgConfig::SDL2 PkgConfig::Slirp PkgConfig::LibArchive)
 endif()
-
-pkg_check_modules(SDL2 REQUIRED IMPORTED_TARGET sdl2)
-pkg_check_modules(Slirp REQUIRED IMPORTED_TARGET slirp)
-pkg_check_modules(LibArchive REQUIRED IMPORTED_TARGET libarchive)
-pkg_check_modules(Zstd REQUIRED IMPORTED_TARGET libzstd)
-
-fix_interface_includes(PkgConfig::SDL2 PkgConfig::Slirp PkgConfig::LibArchive)
 
 add_compile_definitions(ARCHIVE_SUPPORT_ENABLED)
 
@@ -170,8 +172,23 @@ else()
     target_include_directories(melonDS PUBLIC ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 target_link_libraries(melonDS PRIVATE core)
-target_link_libraries(melonDS PRIVATE PkgConfig::SDL2 PkgConfig::Slirp PkgConfig::LibArchive PkgConfig::Zstd)
 target_link_libraries(melonDS PRIVATE ${QT_LINK_LIBS} ${CMAKE_DL_LIBS})
+
+if(MSVC)
+    find_package(SDL2 REQUIRED)
+    find_package(slirp REQUIRED)
+    find_package(archive REQUIRED)
+    find_package(zstd REQUIRED)
+
+    if(archive_IS_STATIC)
+        target_compile_definitions(melonDS PRIVATE LIBARCHIVE_STATIC=1)
+    endif()
+
+    target_include_directories(melonDS PRIVATE ${archive_INCLUDE_DIRS})
+    target_link_libraries(melonDS PRIVATE SDL2::SDL2-static slirp zstd::libzstd_static ${archive_LIBRARIES})
+else()
+    target_link_libraries(melonDS PRIVATE PkgConfig::SDL2 PkgConfig::Slirp PkgConfig::LibArchive)
+endif()
 
 if (UNIX)
     option(PORTABLE "Make a portable build that looks for its configuration in the current directory" OFF)
@@ -191,9 +208,15 @@ elseif (WIN32)
     endif()
 
     configure_file("${CMAKE_SOURCE_DIR}/res/xp.manifest.in" "${CMAKE_BINARY_DIR}/res/xp.manifest")
+    target_sources(melonDS PUBLIC "${CMAKE_BINARY_DIR}/res/xp.manifest")
 
     target_link_libraries(melonDS PRIVATE ws2_32 iphlpapi)
-    set_target_properties(melonDS PROPERTIES LINK_FLAGS_DEBUG "-mconsole")
+
+    if(MSVC)
+        set_target_properties(melonDS PROPERTIES LINK_FLAGS "-subsystem:windows")
+    else()
+        set_target_properties(melonDS PROPERTIES LINK_FLAGS_DEBUG "-mconsole")
+    endif()
 endif()
 
 if (PORTABLE)
