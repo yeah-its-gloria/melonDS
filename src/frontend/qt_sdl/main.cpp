@@ -2315,12 +2315,12 @@ void MainWindow::onUpdateTimerElapsed()
 
     QString title  = "Unknown game";
     char* gameCode = nullptr;
-    if (NDSCart::CartInserted)
+    if (NDSCart::Cart != nullptr)
     {
-        title = QString::fromUtf16(NDSCart::Banner.EnglishTitle);
+        title = QString::fromUtf16(NDSCart::Cart->Banner()->EnglishTitle);
         title = title.left(title.lastIndexOf("\n")).replace("\n", " ");
 
-        gameCode = NDSCart::Header.GameCode;
+        gameCode = NDSCart::Cart->GetHeader().GameCode;
     }
 
     rpc.SetPresence(emuThread->emuIsActive(), title.toUtf8().constData(), gameCode);

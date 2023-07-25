@@ -197,7 +197,7 @@ int GetConfigInt(ConfigEntry entry)
     case Firm_BirthdayDay: return Config::FirmwareBirthdayDay;
     case Firm_Color: return Config::FirmwareFavouriteColour;
 
-    case AudioBitrate: return Config::AudioBitrate;
+    case AudioBitDepth: return Config::AudioBitDepth;
 
     default: break;
     }
@@ -228,6 +228,8 @@ bool GetConfigBool(ConfigEntry entry)
 
     case Firm_OverrideSettings: return Config::FirmwareOverrideSettings != 0;
     case DSi_FullBIOSBoot: return Config::DSiFullBIOSBoot != 0;
+
+    default: break;
     }
 
     return false;
